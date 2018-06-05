@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+
 public class SceneChange : MonoBehaviour
 {
-    public void GotoMainScene()
+    void Update()
     {
-        SceneManager.LoadScene("TestLevel");
-    }
-
-    public void GotoMenuScene()
-    {
-        SceneManager.LoadScene("menu");
+        if (Input.GetMouseButton(0))
+            SceneManager.LoadScene("TestLevel");
     }
 }
+   
+    
+
+

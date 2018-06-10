@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Controller : MonoBehaviour
     public bool grounded;
     public bool candoublejump;
     private Rigidbody2D myRigidBody;
+    public static int health = 3;
+    public static int life = 1;
 
     void Start()
     {
@@ -25,6 +28,12 @@ public class Controller : MonoBehaviour
 
     void PlayerMove()
     {
+        if (health == 0)
+        {
+            //gameover screen
+            SceneManager.LoadScene("GameOver");
+        }
+
         //Store the current horizontal input in the float moveHorizontal.
         moveX = Input.GetAxis("Horizontal");
 
@@ -56,6 +65,12 @@ public class Controller : MonoBehaviour
 
         //move sideways
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(moveX * playerSpeed, gameObject.GetComponent<Rigidbody2D>().velocity.y);
+        
+        //if health is 0 gameover
+        if (health == 0)
+        {
+            SceneManager.LoadScene("GameOver");
+        }
     }
     
     void FlipPlayer()
@@ -69,6 +84,22 @@ public class Controller : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         grounded = true;
+
+        //increase health if touch a pickup
+        if(col.collider.tag == "HealthPickup")
+        {
+            health++;
+
+            //destroy pickup
+            Destroy(col.collider.gameObject);
+        }
+        if (col.collider.tag == "LifePickup")
+        {
+            life++;
+
+            //destroy pickup
+            Destroy(col.collider.gameObject);
+        }
         Debug.Log("Player has collided with " + col.collider.name);
     }
 }
